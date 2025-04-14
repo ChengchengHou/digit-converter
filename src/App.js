@@ -8,6 +8,7 @@ function App() {
     const lengthResult = document.getElementById("length-result");
     const volumnResult = document.getElementById("volumn-result");
     const massResult = document.getElementById("mass-result");
+    const toast = document.getElementById("toast");
 
     function toFeet(value) {
       const feet = (value * 3.281).toFixed(3);
@@ -27,11 +28,23 @@ function App() {
       massResult.textContent = `${value} kg = ${pounds} lbs | ${value} lbs = ${kilograms} kg`;
     }
 
+    function showToast(message) {
+      toast.textContent = message;
+      toast.className = "toast show";
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000); // disappears after 3 seconds
+    }
+
     metricBtn.addEventListener("click", function () {
       const inputValue = Number(metricInput.value);
-      toFeet(inputValue);
-      toGallons(inputValue);
-      toPounds(inputValue);
+      if (inputValue <= 0) {
+        showToast("Please enter a positive number");
+      } else {
+        toFeet(inputValue);
+        toGallons(inputValue);
+        toPounds(inputValue);
+      }
     });
   }, []);
 
@@ -39,7 +52,7 @@ function App() {
     <div>
       <hero>
         <h1>Metric/Imperial Unit Conversion</h1>
-        <input  type="number" id="metric-input" />
+        <input  type="number" id="metric-input" min="0"/>
         <button id="metric-btn">Convert</button>
       </hero>
       <main>
@@ -56,6 +69,7 @@ function App() {
           <p id="mass-result"></p>
         </section>
       </main>
+      <div id="toast" class="toast">Please enter a positive number</div>
     </div>
   );
 }
